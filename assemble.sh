@@ -64,13 +64,13 @@ fi
 
 # rename existing arm-x19 directory and copy Syno ARM files to new arm-x19
 echo "[INFO] rename folder \"arm-x19\" to \"arm-x19.$builddate\""
-$MV arm-x19 arm-x19.$builddate
-echo "[INFO] create empty arm-x19 folder and copy/move Synology files..."
-$MKDIR arm-x19
+# $MV arm-x19 arm-x19.$builddate
+# echo "[INFO] create empty arm-x19 folder and copy/move Synology files..."
+# $MKDIR arm-x19
 $MV $SYNO_TMP_DIR/package/* arm-x19/
-$MV arm-x19/start.sh arm-x19/start.original.sh
-$CP -a arm-x19.$builddate/{start,plex}.sh arm-x19/
-$CP -aR arm-x19.$builddate/Library arm-x19/
+# $MV arm-x19/start.sh arm-x19/start.original.sh
+# $CP -a arm-x19.$builddate/{start,plex}.sh arm-x19/
+# $CP -aR arm-x19.$builddate/Library arm-x19/
 
 echo "[INFO] search for empty directories and create a .gitignore files in them..."
 $FIND ./arm-x19 -type d -empty -exec touch {}/.gitignore \;
