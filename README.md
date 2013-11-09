@@ -12,9 +12,10 @@ Prerequisites
 
 Assemble
 --------
-1. run `./assemble.sh` passing a Synology ARM package, e.g
+1. if you ran `./assemble.sh ...` before, run `git clean -df` to clean the directory of temporary data 
+2. on the NAS run `./assemble.sh` passing a Synology ARM package, e.g
 ````
 ./assemble /share/Public/PlexMediaServer-0.9.7.11.386-d353989-arm.spk
 ````
-2. run `qbuild --exclude '.gitignore'
-3. the QPKG file can be found in the `build` subdirectory and is named like PlexMediaServer_x.x.x.x.xxx_arm-x19.qpkg
+3. run `qbuild --exclude '.gitignore'
+4. the QPKG file can be found in the `build` subdirectory and is named like PlexMediaServer_x.x.x.x.xxx_arm-x19.qpkg
