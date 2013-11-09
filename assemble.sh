@@ -56,17 +56,20 @@ fi
 $TAR xzf $syno_arm_package -C $SYNO_TMP_DIR > /dev/null 2>&1
 if [[ $? -ne 0 ]]; then
    echo "[ERROR] extracting Synology package failed with error code $?"
+   exit 4
 fi
 $TAR -xzf $SYNO_TMP_DIR/package.tgz -C $SYNO_TMP_DIR/package/ > /dev/null 2>&1
 if [[ $? -ne 0 ]]; then
    echo "[ERROR] extracting Synology package failed with error code $?"
+   exit 5
 fi
 
 # rename existing arm-x19 directory and copy Syno ARM files to new arm-x19
-echo "[INFO] rename folder \"arm-x19\" to \"arm-x19.$builddate\""
+# echo "[INFO] rename folder \"arm-x19\" to \"arm-x19.$builddate\""
 # $MV arm-x19 arm-x19.$builddate
 # echo "[INFO] create empty arm-x19 folder and copy/move Synology files..."
 # $MKDIR arm-x19
+echo "[INFO] move Syno package files from \"$SYNO_TMP_DIR/package\" to \"arm-x19\""
 $MV $SYNO_TMP_DIR/package/* arm-x19/
 # $MV arm-x19/start.sh arm-x19/start.original.sh
 # $CP -a arm-x19.$builddate/{start,plex}.sh arm-x19/
@@ -81,7 +84,10 @@ $RM -rf arm-x19/dsm_config
 echo "[INFO] set user/group to admin:adminstrators for all files in arm-x19"
 $CHOWN -hR admin:administrators arm-x19/
 
+echo "[INFO] use new qpkg.conf"
 $MV qpkg.cfg qpkg.cfg.old
 $MV qpkg.cfg.v$plex_version qpkg.cfg
+
+echo "[INFO] now run qbuild --exclude \".gitignore\" to create the package"
 
 exit 0
