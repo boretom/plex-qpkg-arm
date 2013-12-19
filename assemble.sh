@@ -46,14 +46,6 @@ echo "[INFO] set version number and create qpkg.conf.new"
 $SED -e "s/^QPKG_VER=\"[0-9.]*\"$/QPKG_VER=\"$qpkg_plex_version\"/g" \
     -e "s/^# version \([0-9]\.[0-9.]*\) \(.*\)$/# version ${plex_version} \2/g" qpkg.cfg > qpkg.cfg.v$plex_version
 
-#builddate="$(date +'%Y%m%d_%H%M%S')"
-# extract Syno ARM package
-#SYNO_TMP_DIR="${TMP_DIR}/Plex.Syno-arm.$builddate"
-#echo "[INFO] extract Synology ARM package to $SYNO_TMP_DIR"
-#if [[ ! -d "$SYNO_TMP_DIR" ]]; then
-#   $MKDIR -p "$SYNO_TMP_DIR/package"
-#fi
-
 TAR_OPTION=''
 tar --test-label -zf $syno_arm_package > /dev/null 2>&1 && TAR_OPTION='-z '
 if [[ "x$TAR_OPTION" = "x" ]]; then
@@ -61,19 +53,6 @@ if [[ "x$TAR_OPTION" = "x" ]]; then
 else
    echo "[INFO] Synology SPK is a gzip compressed archive..."
 fi
-#$TAR $TAR_OPTION -xf $syno_arm_package -C $SYNO_TMP_DIR > /dev/null 2>&1
-#if [[ $? -ne 0 ]]; then
-#   echo "[ERROR] extracting Synology package failed with error code $?"
-#   exit 4
-#fi
-#$TAR -xzf $SYNO_TMP_DIR/package.tgz -C $SYNO_TMP_DIR/package/ > /dev/null 2>&1
-#if [[ $? -ne 0 ]]; then
-#   echo "[ERROR] extracting Synology package failed with error code $?"
-#   exit 5
-#fi
-
-#echo "[INFO] move Syno package files from \"$SYNO_TMP_DIR/package\" to \"arm-x19\""
-#$MV $SYNO_TMP_DIR/package/* arm-x19/
 
 echo "[INFO] extract Synology Plex package files to \"arm-x19\""
 $TAR $TAR_OPTION -Oxf $syno_arm_package package.tgz | $TAR -xz -C ./arm-x19
