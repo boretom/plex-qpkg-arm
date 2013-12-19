@@ -53,7 +53,15 @@ echo "[INFO] extract Synology ARM package to $SYNO_TMP_DIR"
 if [[ ! -d "$SYNO_TMP_DIR" ]]; then
    $MKDIR -p "$SYNO_TMP_DIR/package"
 fi
-$TAR xzf $syno_arm_package -C $SYNO_TMP_DIR > /dev/null 2>&1
+
+TAR_OPTION=''
+tar --test-label -zf $syno_arm_package > /dev/null 2>&1 && TAR_OPTION='-z '
+if [[ "x$TAR_OPTION" = "x" ]]; then
+   echo "[INFO] Synology SPK is a POSIX TAR archive..."
+else
+   echo "[INFO] Synology SPK is a gzip compressed archive..."
+fi
+$TAR $TAR_OPTION -xf $syno_arm_package -C $SYNO_TMP_DIR > /dev/null 2>&1
 if [[ $? -ne 0 ]]; then
    echo "[ERROR] extracting Synology package failed with error code $?"
    exit 4
@@ -64,16 +72,8 @@ if [[ $? -ne 0 ]]; then
    exit 5
 fi
 
-# rename existing arm-x19 directory and copy Syno ARM files to new arm-x19
-# echo "[INFO] rename folder \"arm-x19\" to \"arm-x19.$builddate\""
-# $MV arm-x19 arm-x19.$builddate
-# echo "[INFO] create empty arm-x19 folder and copy/move Synology files..."
-# $MKDIR arm-x19
 echo "[INFO] move Syno package files from \"$SYNO_TMP_DIR/package\" to \"arm-x19\""
 $MV $SYNO_TMP_DIR/package/* arm-x19/
-# $MV arm-x19/start.sh arm-x19/start.original.sh
-# $CP -a arm-x19.$builddate/{start,plex}.sh arm-x19/
-# $CP -aR arm-x19.$builddate/Library arm-x19/
 
 echo "[INFO] search for empty directories and create a .gitignore files in them..."
 $FIND ./arm-x19 -type d -empty -exec touch {}/.gitignore \;
